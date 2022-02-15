@@ -328,9 +328,7 @@ impl Element {
                 Event::Eof => {
                     return Err(Error::EndOfDocument);
                 }
-                Event::Comment { .. } => {
-                    return Err(Error::NoComments);
-                }
+                Event::Comment { .. } => (),
                 Event::Text { .. }
                 | Event::End { .. }
                 | Event::CData { .. }
@@ -427,7 +425,7 @@ impl Element {
                 Event::Eof => {
                     break;
                 }
-                Event::Comment(_) => return Err(Error::NoComments),
+                Event::Comment(_) => (),
                 Event::Decl { .. } | Event::PI { .. } | Event::DocType { .. } => (),
             }
         }
