@@ -14,6 +14,8 @@
 use std::convert::From;
 use std::error::Error as StdError;
 
+use quick_xml::events::attributes::AttrError;
+
 /// Our main error type.
 #[derive(Debug)]
 pub enum Error {
@@ -25,6 +27,9 @@ pub enum Error {
 
     /// An I/O error, from std::io.
     IoError(::std::io::Error),
+
+    /// Attribute Error from `quick_xml`
+    AttrError(AttrError),
 
     /// An error which is returned when the end of the document was reached prematurely.
     EndOfDocument,
@@ -52,6 +57,7 @@ impl StdError for Error {
             Error::XmlError(e) => Some(e),
             Error::Utf8Error(e) => Some(e),
             Error::IoError(e) => Some(e),
+            Error::AttrError(e) => Some(e),
             Error::EndOfDocument => None,
             Error::InvalidElementClosed => None,
             Error::InvalidElement => None,
@@ -68,6 +74,7 @@ impl std::fmt::Display for Error {
             Error::XmlError(e) => write!(fmt, "XML error: {}", e),
             Error::Utf8Error(e) => write!(fmt, "UTF-8 error: {}", e),
             Error::IoError(e) => write!(fmt, "IO error: {}", e),
+            Error::AttrError(e) => write!(fmt, "Attribute error: {}", e),
             Error::EndOfDocument => {
                 write!(fmt, "the end of the document has been reached prematurely")
             }
@@ -97,6 +104,12 @@ impl From<::std::str::Utf8Error> for Error {
 impl From<::std::io::Error> for Error {
     fn from(err: ::std::io::Error) -> Error {
         Error::IoError(err)
+    }
+}
+
+impl From<AttrError> for Error {
+    fn from(err: AttrError) -> Error {
+        Error::AttrError(err)
     }
 }
 

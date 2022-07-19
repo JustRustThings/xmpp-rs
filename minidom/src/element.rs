@@ -411,7 +411,7 @@ impl Element {
                     }
                 }
                 Event::CData(s) => {
-                    let text = s.unescape_and_decode(&reader)?;
+                    let text = s.escape().unescape_and_decode(&reader)?;
                     if !text.is_empty() {
                         let current_elem = stack.last_mut().unwrap();
                         current_elem.append_text_node(text);
