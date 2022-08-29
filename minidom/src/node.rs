@@ -168,7 +168,7 @@ impl Node {
         match *self {
             Node::Element(ref elmt) => elmt.write_to_inner(writer, prefixes)?,
             Node::Text(ref s) => {
-                writer.write_event(Event::Text(BytesText::from_plain_str(s)))?;
+                writer.write_event(Event::Text(BytesText::new(s)))?;
             }
         }
 
